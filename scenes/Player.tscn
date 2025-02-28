@@ -1,0 +1,61 @@
+[gd_scene load_steps=9 format=3 uid="uid://brcyx851mfnu0"]
+
+[ext_resource type="Script" path="res://scenes/Player.gd" id="1_aqktt"]
+[ext_resource type="Texture2D" uid="uid://frwcqhlecb58" path="res://assets/kenney_platformercharacters/PNG/Player/Poses/player_duck.png" id="2_fghyw"]
+[ext_resource type="Texture2D" uid="uid://dqe3xcii54qm" path="res://assets/kenney_platformercharacters/PNG/Player/Poses/player_idle.png" id="2_lymj0"]
+[ext_resource type="Texture2D" uid="uid://cpv0qxx81v0m3" path="res://assets/kenney_platformercharacters/PNG/Player/Poses/player_walk1.png" id="2_mde4q"]
+[ext_resource type="Texture2D" uid="uid://c0oji5em2e0n2" path="res://assets/kenney_platformercharacters/PNG/Player/Poses/player_walk2.png" id="3_28uod"]
+[ext_resource type="Texture2D" uid="uid://4llywo7pd8pp" path="res://assets/kenney_platformercharacters/PNG/Player/Poses/player_jump.png" id="4_abqx1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kvsrt"]
+size = Vector2(61, 94)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_e1ewn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_fghyw")
+}],
+"loop": true,
+"name": &"crouch",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_lymj0")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_abqx1")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_mde4q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_28uod")
+}],
+"loop": true,
+"name": &"run",
+"speed": 10.0
+}]
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_aqktt")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, 10)
+shape = SubResource("RectangleShape2D_kvsrt")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_e1ewn")
+animation = &"jump"
+frame_progress = 0.889142
