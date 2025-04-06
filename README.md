@@ -1,4 +1,4 @@
-# Implementasi Fitur
+# Tutorial 3 (Implementasi Fitur)
 
 ## **Double Jump**
 Fitur *double jump* dapat dibuat dengan menambahkan pendengar jika ada input `"ui_up"` saat sedang berada di udara. Untuk memastikan hanya dapat melakukan *jump* dua kali, pada *if condition*, tambahkan variabel *state* `is_jumping` yang akan bernilai `true` saat pertama kali melompat dan bernilai `false` sesudah melompat kedua kalinya.
@@ -93,8 +93,96 @@ if Input.is_action_pressed("ui_left"):
         sprite.play("run")
     velocity.x = -walk_speed
 ```
+# Tutorial 5
 
-## **Referensi**
+Pada tutorial ini, saya menambahkan objek bendera yang dapat di-toggle (on/off) menggunakan `AnimatedSprite2D`. Ketika player berada di dekat bendera dan menekan tombol `E`, bendera akan berubah status, memainkan animasi, efek suara, serta mengganti background music (BGM).
+
+---
+
+## Deteksi Posisi Player
+
+```gdscript
+var player_in_range = false  # Menyimpan apakah player sedang berada di dekat bendera
+
+func _on_area_2d_body_entered(body):
+	if body.name == "Player":
+		player_in_range = true
+
+func _on_area_2d_body_exited(body):
+	if body.name == "Player":
+		player_in_range = false
+```
+
+---
+
+## Deteksi Input Interaksi (E)
+
+```gdscript
+var was_pressed = false
+
+func _process(_delta):
+	var pressed = Input.is_physical_key_pressed(KEY_E)
+	if player_in_range and pressed and !was_pressed:
+		was_pressed = true
+		toggle_flag()
+	elif not pressed:
+		was_pressed = false
+```
+
+---
+
+## Toggle Bendera, Animasi, dan SFX
+
+```gdscript
+func toggle_flag():
+	is_on = !is_on
+	update_flag()
+	sound.play()
+	update_bgm()
+```
+
+```gdscript
+func update_flag():
+	if is_on:
+		anim_sprite.play("on")
+	else:
+		anim_sprite.play("off")
+```
+
+---
+
+## Ganti Background Music (BGM)
+
+```gdscript
+func update_bgm():
+	if bgm_player == null:
+		return
+	bgm_player.stream = bgm_on if is_on else bgm_off
+	bgm_player.play()
+```
+
+Untuk itu, ditambahkan variabel berikut agar bisa diset langsung dari editor:
+
+```gdscript
+@export var bgm_on: AudioStream
+@export var bgm_off: AudioStream
+```
+
+Untuk mendapatkan akses ke BGM player di scene utama:
+
+```gdscript
+@onready var bgm_player = get_node("/root/Main/BGMPlayer")
+```
+
+---
+
+## Referensi Asset
+
+- SFX Bendera: [Kenney RPG Audio](https://kenney.nl/assets/rpg-audio)  
+- BGM: [YouTube - Genderang UI](https://www.youtube.com/watch?v=2NvinfnNd1c&ab_channel=AnthemEnthusiastsIndonesia)  
+- Sprite: [Kenney Platformer Pack (Medieval)](https://kenney.nl/assets/platformer-pack-medieval)
+
+## **Referensi (Tutorial 3)**
 - [Godot 2D Sprite Animation](https://docs.godotengine.org/en/stable/tutorials/2d/2d_sprite_animation.html)
 - [Forum Godot - Double Click Detection](https://forum.godotengine.org/t/how-to-detect-double-click-in-process/69606)
 - Dokumentasi *Godot*
