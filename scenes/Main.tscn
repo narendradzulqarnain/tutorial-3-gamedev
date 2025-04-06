@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://dsyfep1odrxje"]
+[gd_scene load_steps=5 format=3 uid="uid://dsyfep1odrxje"]
 
-[ext_resource type="PackedScene" path="res://Scenes/Ground.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://tdtpqiy1mag0" path="res://Scenes/Ground.tscn" id="1"]
 [ext_resource type="PackedScene" uid="uid://brcyx851mfnu0" path="res://scenes/Player.tscn" id="1_c12lw"]
+[ext_resource type="AudioStream" uid="uid://cnirvwq87iymw" path="res://assets/Sounds/assets_sound_bgm.wav" id="3_40q88"]
+[ext_resource type="PackedScene" uid="uid://dsua8fs67vk6r" path="res://scenes/Flag.tscn" id="4_hnmtv"]
 
-[node name="Root" type="Node2D"]
+[node name="Main" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_c12lw")]
 position = Vector2(492, 61)
@@ -22,3 +24,24 @@ position = Vector2(789.149, 294.054)
 
 [node name="Ground3" parent="." instance=ExtResource("1")]
 position = Vector2(225.95, 294.562)
+
+[node name="BGMPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_40q88")
+autoplay = true
+
+[node name="Area2D" parent="." instance=ExtResource("4_hnmtv")]
+position = Vector2(53, 59)
+
+[node name="Label" type="Label" parent="."]
+offset_left = 77.0
+offset_top = 7.0
+offset_right = 217.0
+offset_bottom = 30.0
+text = "Press E to interact"
+
+[node name="Label2" type="Label" parent="."]
+offset_left = 230.0
+offset_top = 170.0
+offset_right = 328.0
+offset_bottom = 193.0
+text = "double jump"
