@@ -18,6 +18,7 @@ var crouch_collider_size
 var default_sprite_position
 var crouch_sprite_position
 var is_crouching = false
+var crouch_offset = 5
 # Called when the node enters the scene tree for the first time.
 @onready var collision_shape = $CollisionShape2D
 @onready var sprite = $AnimatedSprite2D
@@ -61,11 +62,13 @@ func _physics_process(delta):
 			if current_time - last_right_move < MAX_DOUBLE_TAP_TIME:
 				dash(1)
 			last_right_move = current_time
+			sprite.flip_h = false
 		if Input.is_action_just_pressed("ui_left"):
 			var current_time = Time.get_ticks_msec() / 1000.0
 			if current_time - last_left_move < MAX_DOUBLE_TAP_TIME:
 				dash(-1)
 			last_left_move = current_time
+			sprite.flip_h = true
 			# Normal input, tidak dash
 		if Input.is_action_pressed("ui_down"):
 			crouch()
@@ -78,6 +81,7 @@ func _physics_process(delta):
 				sprite.play("crouch")
 			else:
 				sprite.play("run")
+				sprite.flip_h = true
 			velocity.x = -walk_speed
 
 		elif Input.is_action_pressed("ui_right"):
@@ -87,13 +91,16 @@ func _physics_process(delta):
 				sprite.play("crouch")
 			else:
 				sprite.play("run")
+				sprite.flip_h = false
 			velocity.x =  walk_speed
 		
 		else:
 			#sprite.play("idle")
 			velocity.x = 0
-		if Input.is_action_just_released("ui_right") or Input.is_action_just_released("ui_left"):
-			sprite.play("idle")
+			if velocity.x == 0 and not is_crouching:
+				sprite.play("idle")
+		#if Input.is_action_just_released("ui_right") or Input.is_action_just_released("ui_left"):
+			#sprite.play("idle")
 	
 	# "move_and_slide" already takes delta time into account.
 	move_and_slide()
@@ -109,11 +116,14 @@ func crouch():
 	is_crouching = true
 	sprite.play("crouch")
 	collision_shape.shape.set_size(crouch_collider_size)
+	position.y += crouch_offset
 	sprite.position = crouch_sprite_position
 	#sprite.scale.y = 0.5
 func exit_crouch():
 	is_crouching = false
+	var pos = collision_shape.position
 	sprite.play("idle")
+	position.y -= crouch_offset
 	collision_shape.shape.set_size(default_collider_size)
 	sprite.position = default_sprite_position
 	#sprite.scale.y = 1
